@@ -78,12 +78,8 @@ def main():
     parser.add_argument('--end_id', help='ending id')
 
     args = parser.parse_args()
-
-    print(args.start_id)
-    print(args.end_id)
-    url_ = "https://tululu.org/b9/"
+        
     
-
     for book_id in range(int(args.start_id),int(args.end_id)):
         url = f"https://tululu.org/b{book_id}/"
         parse_book_page(url)
