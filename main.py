@@ -19,37 +19,29 @@ def parse_book_page(url):
         check_for_redirect(response)
         response.raise_for_status() 
 
-        soup = BeautifulSoup(response.text, 'lxml')
+        book_data = {}
+
+        soup = BeautifulSoup(response.text, 'lxml')\
 
         title_tag = soup.find('table').find("td", {"class": "ow_px_td"}).find("div", {"id" : "content"}).find("h1")
+ 
+ 
+        book_data["Название"] = title_tag.text.split(" :: ")[0].strip('  ')
+        book_data["Автор"] = title_tag.text.split(" :: ")[1].strip('  ')
+
+        image_tag = soup.find("div", {"class": "bookimage"}).find('img')     
+        book_data["Обложка"] = urljoin(url, image_tag["src"])
+                 
         
-
-        title = title_tag.text.split(" :: ")[0].strip('  ')
-        author = title_tag.text.split(" :: ")[1].strip('  ')
-
-        image_tag = soup.find("div", {"class": "bookimage"}).find('img')
-        
-        image = urljoin(url, image_tag["src"])
-                  
-        coments = []
-
+        book_data["Коментарии"] = []
         for coment in soup.findAll("div", {"class": "texts"}):
-            coments.append(coment.find("span").text)
+            book_data["Коментарии"].append(coment.find("span").text)
 
-        janres = []
-
+        book_data["Жанры"] = []
         for janre in soup.find("span", {"class": "d_book"}).find_all("a"):
-            janres.append(janre.text)
-
-        print("Жанры : " + str(janres))
-        print("Коментарии : " + str(coments))
-        print("Название : " + title)
-        print("Автор : " + author)
-        print("Обложка : " + image)
-        print("-------------------")
-        
-
-        #file_name = sanitize_filename(book_id + ". "  + title_tag.text.split(" :: ")[0].strip('  ') + ".txt")
+            book_data["Жанры"].append(janre.text)
+           
+        return book_data
 
     except requests.HTTPError:
         print("Error")
@@ -82,7 +74,11 @@ def main():
     
     for book_id in range(int(args.start_id),int(args.end_id)):
         url = f"https://tululu.org/b{book_id}/"
-        parse_book_page(url)
+
+        for category, info in parse_book_page(url).items():
+            print(f"{category} - {info}")
+            
+        print("--------------------")    
 
 
 
