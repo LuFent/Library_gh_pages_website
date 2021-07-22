@@ -7,6 +7,7 @@ from pathvalidate import sanitize_filename
 from urllib.parse import urljoin
 
 
+
 def check_for_redirect(response):
     if response.status_code == 302:
         raise requests.HTTPError
@@ -26,20 +27,20 @@ def parse_book_page(url):
         title_tag = soup.find('table').find("td", {"class": "ow_px_td"}).find("div", {"id" : "content"}).find("h1")
  
  
-        book_data["Название"] = title_tag.text.split(" :: ")[0].strip('  ')
-        book_data["Автор"] = title_tag.text.split(" :: ")[1].strip('  ')
+        book_data["ГЌГ Г§ГўГ Г­ГЁГҐ"] = title_tag.text.split(" :: ")[0].strip('В  ')
+        book_data["ГЂГўГІГ®Г°"] = title_tag.text.split(" :: ")[1].strip('В  ')
 
         image_tag = soup.find("div", {"class": "bookimage"}).find('img')     
-        book_data["Обложка"] = urljoin(url, image_tag["src"])
+        book_data["ГЋГЎГ«Г®Г¦ГЄГ "] = urljoin(url, image_tag["src"])
                  
         
-        book_data["Коментарии"] = []
+        book_data["ГЉГ®Г¬ГҐГ­ГІГ Г°ГЁГЁ"] = []
         for coment in soup.findAll("div", {"class": "texts"}):
-            book_data["Коментарии"].append(coment.find("span").text)
+            book_data["ГЉГ®Г¬ГҐГ­ГІГ Г°ГЁГЁ"].append(coment.find("span").text)
 
-        book_data["Жанры"] = []
+        book_data["Г†Г Г­Г°Г»"] = []
         for janre in soup.find("span", {"class": "d_book"}).find_all("a"):
-            book_data["Жанры"].append(janre.text)
+            book_data["Г†Г Г­Г°Г»"].append(janre.text)
            
         return book_data
 
