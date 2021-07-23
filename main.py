@@ -106,7 +106,7 @@ def main():
 
             download_txt(book_id, f"{str(book_id)}. {book_data['title']}.txt")
             
-            download_img(page_url,f"{str(book_id)}")
+            download_img(page_url,f"{str(book_id)}.jpg")
 
             print("------------------")
 
