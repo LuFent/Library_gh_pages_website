@@ -12,7 +12,9 @@ def check_for_redirect(response):
         raise requests.HTTPError
 
 
-def parse_book_page(url):
+def parse_book_page(book_id):
+
+    url = f"https://tululu.org/b{book_id}/"
 
     response = requests.get(url)
     check_for_redirect(response)
@@ -32,7 +34,7 @@ def parse_book_page(url):
 
     book_data["cover"] = urljoin(url, image_tag["src"])
                     
-    book_data["comments"] = [coment.find("span").text for coment in soup.findAll("div", {"class": "texts"})] 
+    book_data["comments"] = [coment.find("span").text for coment in soup.find_all("div", {"class": "texts"})] 
 
     book_data["ganres"] = [ganre.text for ganre in soup.find("span", {"class": "d_book"}).find_all("a")]
                 
@@ -82,14 +84,15 @@ def main():
          
     for book_id in range(args.start_id, args.end_id):      
         try:
-            page_url = f"https://tululu.org/b{book_id}/"
-        
-            book_data = parse_book_page(page_url)
+
+           
+            book_data = parse_book_page(book_id)
 
             for category, info in book_data.items():
                     print(f"{category} - {info}")
 
             parameters =  {"id": f"{book_id}"}
+
             download_txt(parameters, f"{str(book_id)}. {book_data['title']}.txt")
             
             download_img(book_data["cover"], f"{str(book_id)}.jpg")
