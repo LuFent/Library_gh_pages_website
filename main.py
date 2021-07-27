@@ -1,11 +1,10 @@
-﻿import argparse
-import requests
-from bs4 import BeautifulSoup
+﻿from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 from urllib.parse import urljoin
 from pathlib import Path
 import os
-
+import argparse
+import requests
 
 
 def check_for_redirect(response):
@@ -15,34 +14,32 @@ def check_for_redirect(response):
 
 def parse_book_page(url):
 
-        response = requests.get(url)
-        check_for_redirect(response)
-        response.raise_for_status() 
+    response = requests.get(url)
+    check_for_redirect(response)
+    response.raise_for_status() 
 
-        book_data = {}
+    book_data = {}
 
-        soup = BeautifulSoup(response.text, 'lxml')
+    soup = BeautifulSoup(response.text, 'lxml')
+    title_tag = soup.find('table').find("td", {"class": "ow_px_td"}).find("div", {"id" : "content"}).find("h1")
+    title_and_author_string = title_tag.text.split(" :: ")
 
-        title_tag = soup.find('table').find("td", {"class": "ow_px_td"}).find("div", {"id" : "content"}).find("h1")
+    book_data["title"] = title_and_author_string[0].strip('  ')
 
-        title_and_author_string = title_tag.text.split(" :: ")
+    book_data["author"] = title_and_author_string[1].strip('  ')
 
-        book_data["title"] = title_and_author_string[0].strip('  ')
+    image_tag = soup.find("div", {"class": "bookimage"}).find('img')     
 
-        book_data["author"] = title_and_author_string[1].strip('  ')
+    book_data["cover"] = urljoin(url, image_tag["src"])
+                    
+    book_data["comments"] = [coment.find("span").text for coment in soup.findAll("div", {"class": "texts"})] 
 
-        image_tag = soup.find("div", {"class": "bookimage"}).find('img')     
-        book_data["cover"] = urljoin(url, image_tag["src"])
-                 
-        
-        book_data["comments"] = [coment.find("span").text for coment in soup.findAll("div", {"class": "texts"}) ] 
-
-        book_data["ganres"] = [ganre.text for ganre in soup.find("span", {"class": "d_book"}).find_all("a")]
+    book_data["ganres"] = [ganre.text for ganre in soup.find("span", {"class": "d_book"}).find_all("a")]
                 
-        return book_data
+    return book_data
 
 
-def download_txt(book_id, file_name, folder='books/'):
+def download_txt(book_id, file_name, folder = 'books/'):
     
     url = f"https://tululu.org/txt.php?id={book_id}"
 
@@ -53,13 +50,13 @@ def download_txt(book_id, file_name, folder='books/'):
 
     curent_dir = os.getcwdb().decode(encoding='UTF-8')
 
-    Path(f"{curent_dir}\{folder}").mkdir(parents=True, exist_ok=True)
+    Path(f"{curent_dir}\{folder}").mkdir(parents = True, exist_ok = True)
      
     with open(f"{folder}\{safe_file_name}", 'wb') as file:
         file.write(response.text.encode())
 
 
-def download_img(url, file_name, folder='images/'):
+def download_img(url, file_name, folder = 'images/'):
 
     response = requests.get(url, allow_redirects = False)
     response.raise_for_status() 
@@ -73,7 +70,7 @@ def download_img(url, file_name, folder='images/'):
 
     curent_dir = os.getcwdb().decode(encoding='UTF-8')
 
-    Path(f"{curent_dir}\{folder}").mkdir(parents=True, exist_ok=True)
+    Path(f"{curent_dir}\{folder}").mkdir(parents = True, exist_ok = True)
 
     with open(f"{folder}\{safe_file_name}", 'wb') as file:
         file.write(image_response.content)
@@ -81,22 +78,16 @@ def download_img(url, file_name, folder='images/'):
 
 
 def main():
-    
-
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--start_id', type = int, help='starting id')
-    parser.add_argument('--end_id',type = int, help='ending id')
+    parser.add_argument('--start_id', type = int, help = 'starting id')
+    parser.add_argument('--end_id', type = int, help = 'ending id')
 
     args = parser.parse_args()
-        
-
-    
-    for book_id in range(args.start_id,args.end_id):
-        
+         
+    for book_id in range(args.start_id, args.end_id):      
         try:
-
             page_url = f"https://tululu.org/b{book_id}/"
         
             book_data = parse_book_page(page_url)
@@ -106,7 +97,7 @@ def main():
 
             download_txt(book_id, f"{str(book_id)}. {book_data['title']}.txt")
             
-            download_img(page_url,f"{str(book_id)}.jpg")
+            download_img(page_url, f"{str(book_id)}.jpg")
 
             print("------------------")
 
