@@ -39,12 +39,12 @@ def parse_book_page(url):
     return book_data
 
 
-def download_txt(book_id, file_name, folder = 'books/'):
+def download_txt(parameters, file_name, folder = 'books/'):
     
-    url = f"https://tululu.org/txt.php?id={book_id}"
+    url = f"https://tululu.org/txt.php?"
 
-    response = requests.get(url, allow_redirects = False)  
-    response.raise_for_status()                            
+    response = requests.get(url, params = parameters, allow_redirects = False)  
+    response.raise_for_status()                             
 
     safe_file_name = sanitize_filename(file_name)
 
@@ -58,13 +58,7 @@ def download_txt(book_id, file_name, folder = 'books/'):
 
 def download_img(url, file_name, folder = 'images/'):
 
-    response = requests.get(url, allow_redirects = False)
-    response.raise_for_status() 
-    soup = BeautifulSoup(response.text, 'lxml')
-
-    image_tag = soup.find("div", {"class": "bookimage"}).find('img')
-    image_url = urljoin(url, image_tag["src"])
-    image_response = requests.get(image_url)
+    image_response = requests.get(url)
 
     safe_file_name = sanitize_filename(file_name)
 
@@ -95,9 +89,10 @@ def main():
             for category, info in book_data.items():
                     print(f"{category} - {info}")
 
-            download_txt(book_id, f"{str(book_id)}. {book_data['title']}.txt")
+            parameters =  {"id": f"{book_id}"}
+            download_txt(parameters, f"{str(book_id)}. {book_data['title']}.txt")
             
-            download_img(page_url, f"{str(book_id)}.jpg")
+            download_img(book_data["cover"], f"{str(book_id)}.jpg")
 
             print("------------------")
 
