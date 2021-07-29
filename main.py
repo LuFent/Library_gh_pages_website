@@ -43,7 +43,7 @@ def parse_book_page(book_id):
 
 def download_txt(parameters, file_name, folder = 'books/'):
     
-    url = f"https://tululu.org/txt.php?"
+    url = "https://tululu.org/txt.php"
 
     response = requests.get(url, params = parameters, allow_redirects = False)  
     response.raise_for_status()                             
@@ -56,7 +56,7 @@ def download_txt(parameters, file_name, folder = 'books/'):
      
     with open(f"{folder}\{safe_file_name}", 'wb') as file:
         file.write(response.text.encode())
-
+            
 
 def download_img(url, file_name, folder = 'images/'):
 
@@ -91,11 +91,11 @@ def main():
             for category, info in book_data.items():
                     print(f"{category} - {info}")
 
-            parameters =  {"id": f"{book_id}"}
+            parameters =  {"id": book_id}
 
-            download_txt(parameters, f"{str(book_id)}. {book_data['title']}.txt")
+            download_txt(parameters, f"{book_id}. {book_data['title']}.txt")
             
-            download_img(book_data["cover"], f"{str(book_id)}.jpg")
+            download_img(book_data["cover"], f"{book_id}.jpg")
 
             print("------------------")
 
