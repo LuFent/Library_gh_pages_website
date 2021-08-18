@@ -36,7 +36,9 @@ def parse_book_page(url):
     title_tag_selector = "table td.ow_px_td div#content h1"
     title_tag = soup.select_one(title_tag_selector)
     title_and_author = title_tag.text.split(" :: ")
+
     book_data["title"] = title_and_author[0].strip('\xa0').strip(' ')
+
     book_data["author"] = title_and_author[1].strip('\xa0').strip(' ')
 
     image_selector = "div.bookimage img"
