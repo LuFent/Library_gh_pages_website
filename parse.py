@@ -7,22 +7,21 @@ import os
 import argparse
 import requests
 import json
-
-
-def get_id_from_url(url):   
-    id = ""
-    for symbol in reversed(url.strip("/")):
-         
-        if symbol == "b":
-            break
-        id += symbol
-    
-    id = id[::-1]    
-    return id
-
+   
 def check_for_redirect(response):
     if response.history:
         raise requests.HTTPError
+
+def get_pages_amount(url):
+    response = requests.get(url)
+    check_for_redirect(response)
+    response.raise_for_status() 
+
+    soup = BeautifulSoup(response.text, 'lxml')  
+    selector = "table.tabs td.ow_px_td div#content p.center a.npage"
+    last_page_number = soup.select(selector)
+
+    return last_page_number[-1].text
 
 def parse_book_page(url):
     response = requests.get(url)
@@ -83,7 +82,8 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--start_page', type = int, default = 1, help = 'starting page')
-    parser.add_argument('--end_page', type = int, default = 2, help = 'ending page')
+    #parser.add_argument('--end_page', type = int, default = get_pages_amount("https://tululu.org/l55/1/"), help = 'ending page')
+    parser.add_argument('--end_page', type = int, default = 3, help = 'ending page')
     parser.add_argument('--dest_folder', default = os.path.join(os.path.abspath(os.curdir)) , help = 'books and imgs dir')
     parser.add_argument('--json_path', default = os.path.join(os.path.abspath(os.curdir)), help = 'json-file dir')
 
@@ -94,9 +94,7 @@ def main():
 
     dir = args.dest_folder
 
-    json_dir = args.json_path
-
-    json_path = os.path.join(json_dir, "data.json" )
+    json_path = os.path.join(args.json_path, "data.json" )
         
     json_dicts = []
 
@@ -110,11 +108,11 @@ def main():
         
         book_cards_selector = "div#content"
 
-        book_cards_list = soup.select_one(book_cards_selector).find_all("table")
+        book_cards = soup.select_one(book_cards_selector).select("table")
         
-        for book_card in book_cards_list:                  
+        for book_card in book_cards:                  
             
-            book_url = urljoin(url, book_card.find("a")["href"])
+            book_url = urljoin(url, book_card.select_one("a")["href"])
             book_id = book_url.split('/b')[-1]         
             
             book_data = parse_book_page(book_url)
@@ -129,9 +127,9 @@ def main():
             if not args.skip_imgs:
                 download_img(book_data['cover'],  f"Обложка книги {book_id} {book_data['title']}.png", dir)       
 
-        with open (json_path, 'a+') as file:
-                json.dump(json_dicts, file, ensure_ascii=False, sort_keys=True, indent=4)         
-
+    with open (json_path, 'a+') as file:
+        json.dump(json_dicts, file, ensure_ascii=False, sort_keys=True, indent=4)         
+  
 
 if __name__ == '__main__':
     main()
