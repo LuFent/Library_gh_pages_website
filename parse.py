@@ -18,10 +18,11 @@ def get_pages_amount(url):
     response.raise_for_status() 
 
     soup = BeautifulSoup(response.text, 'lxml')  
-    selector = "table.tabs td.ow_px_td div#content p.center a.npage"
-    last_page_number = soup.select(selector)
-
-    return last_page_number[-1].text
+    selector = "table.tabs td.ow_px_td div#content p.center a.npage:last-child"
+    
+    last_page_number = soup.select_one(selector)
+    
+    return last_page_number.text
 
 def parse_book_page(url):
     response = requests.get(url)
@@ -82,8 +83,7 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--start_page', type = int, default = 1, help = 'starting page')
-    #parser.add_argument('--end_page', type = int, default = get_pages_amount("https://tululu.org/l55/1/"), help = 'ending page')
-    parser.add_argument('--end_page', type = int, default = 3, help = 'ending page')
+    parser.add_argument('--end_page', type = int, default = get_pages_amount("https://tululu.org/l55/1/"), help = 'ending page')
     parser.add_argument('--dest_folder', default = os.path.join(os.path.abspath(os.curdir)) , help = 'books and imgs dir')
     parser.add_argument('--json_path', default = os.path.join(os.path.abspath(os.curdir)), help = 'json-file dir')
 
@@ -91,8 +91,6 @@ def main():
     parser.add_argument('--skip_txt', action="store_true",  help = 'skip txt download')
 
     args = parser.parse_args()
-
-    dir = args.dest_folder
 
     json_path = os.path.join(args.json_path, "data.json" )
         
@@ -122,10 +120,10 @@ def main():
             parameters =  {"id": book_id}
 
             if not args.skip_txt:
-                download_txt(parameters, f"Книга {book_id} {book_data['title']}.txt", dir)
+                download_txt(parameters, f"Книга {book_id} {book_data['title']}.txt", args.dest_folder)
 
             if not args.skip_imgs:
-                download_img(book_data['cover'],  f"Обложка книги {book_id} {book_data['title']}.png", dir)       
+                download_img(book_data['cover'],  f"Обложка книги {book_id} {book_data['title']}.png", args.dest_folder)       
 
     with open (json_path, 'a+') as file:
         json.dump(json_dicts, file, ensure_ascii=False, sort_keys=True, indent=4)         
