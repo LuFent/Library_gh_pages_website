@@ -2,14 +2,17 @@ from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 from urllib.parse import urljoin
 from pathlib import Path
+from livereload import Server
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 import os
 import argparse
 import requests
 import json
-from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-   
+
+json_dicts = []
+
 def check_for_redirect(response):
     if response.history:
         raise requests.HTTPError
@@ -80,6 +83,25 @@ def download_img(url, file_name, dir):
     with open(file_path, 'wb') as file:
         file.write(image_response.content)
 
+def on_reload():
+
+    env = Environment(
+    loader=FileSystemLoader('.'),
+    autoescape=select_autoescape(['html', 'xml'])
+    )
+
+    template = env.get_template('template.html')
+
+    rendered_page = template.render(
+    books_data = json_dicts 
+    )
+
+    with open('index.html', 'w', encoding="utf8") as file:
+        file.write(rendered_page)
+
+    print("Site rebuilt")
+
+
 def main():
 
     parser = argparse.ArgumentParser()
@@ -96,7 +118,7 @@ def main():
 
     json_path = os.path.join(args.json_path, "data.json" )
         
-    json_dicts = []
+    
 
     for page_id in range(args.start_page, args.end_page):
 
@@ -128,31 +150,22 @@ def main():
             if not args.skip_imgs:
                 book_data['cover_path'] =  os.path.join(args.dest_folder, "images", sanitize_filename(f"book_cover_{book_id}_{book_data['title']}.png").replace(" ", "_") )
                 download_img(book_data['cover'],  f"book_cover_{book_id}_{book_data['title']}.png", args.dest_folder)    
-                #print(f"book_cover_{book_id}_{book_data['title']}.png")
-             #  print(sanitize_filename(f"book_cover_{book_id}_{book_data['title']}.png"))
-             ##   print(book_data['cover_path'])
+
            
 
             json_dicts.append(book_data)
-            
+                       
 
+    on_reload()
 
     with open (json_path, 'a+') as file:
         json.dump(json_dicts, file, ensure_ascii=False, sort_keys=True, indent=4)    
     
-    env = Environment(
-    loader=FileSystemLoader('.'),
-    autoescape=select_autoescape(['html', 'xml'])
-    )
+    server = Server()
 
-    template = env.get_template('template.html')
+    server.watch('template.html', on_reload)
 
-    rendered_page = template.render(
-    books_data = json_dicts 
-    )
-
-    with open('index.html', 'w', encoding="utf8") as file:
-        file.write(rendered_page)
+    server.serve(root='.')
 
 
 
