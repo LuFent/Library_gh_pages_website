@@ -7,6 +7,8 @@ import os
 import argparse
 import requests
 import json
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+
    
 def check_for_redirect(response):
     if response.history:
@@ -71,7 +73,7 @@ def download_img(url, file_name, dir):
 
     image_response = requests.get(url)
 
-    safe_file_name = sanitize_filename(file_name)
+    safe_file_name = sanitize_filename(file_name).replace(" ", "_")
     file_path = os.path.join(dir, "images" , safe_file_name)
     Path(os.path.join(dir, "images")).mkdir(parents = True, exist_ok = True)
 
@@ -114,8 +116,9 @@ def main():
             book_id = book_url.split('/b')[-1]         
             
             book_data = parse_book_page(book_url)
-         
-            json_dicts.append(book_data)
+            
+
+            
 
             parameters =  {"id": book_id}
 
@@ -123,10 +126,36 @@ def main():
                 download_txt(parameters, f"Книга {book_id} {book_data['title']}.txt", args.dest_folder)
 
             if not args.skip_imgs:
-                download_img(book_data['cover'],  f"Обложка книги {book_id} {book_data['title']}.png", args.dest_folder)       
+                book_data['cover_path'] =  os.path.join(args.dest_folder, "images", sanitize_filename(f"book_cover_{book_id}_{book_data['title']}.png").replace(" ", "_") )
+                download_img(book_data['cover'],  f"book_cover_{book_id}_{book_data['title']}.png", args.dest_folder)    
+                #print(f"book_cover_{book_id}_{book_data['title']}.png")
+             #  print(sanitize_filename(f"book_cover_{book_id}_{book_data['title']}.png"))
+             ##   print(book_data['cover_path'])
+           
+
+            json_dicts.append(book_data)
+            
+
 
     with open (json_path, 'a+') as file:
-        json.dump(json_dicts, file, ensure_ascii=False, sort_keys=True, indent=4)         
+        json.dump(json_dicts, file, ensure_ascii=False, sort_keys=True, indent=4)    
+    
+    env = Environment(
+    loader=FileSystemLoader('.'),
+    autoescape=select_autoescape(['html', 'xml'])
+    )
+
+    template = env.get_template('template.html')
+
+    rendered_page = template.render(
+    books_data = json_dicts 
+    )
+
+    with open('index.html', 'w', encoding="utf8") as file:
+        file.write(rendered_page)
+
+
+
   
 
 if __name__ == '__main__':
