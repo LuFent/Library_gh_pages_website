@@ -6,6 +6,7 @@ from livereload import Server
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from more_itertools import chunked
 
+
 import os
 import argparse
 import requests
@@ -62,16 +63,16 @@ def download_txt(parameters, file_name, dir):
     url = "https://tululu.org/txt.php"
 
     response = requests.get(url, params = parameters, allow_redirects = False)  
+   # print(response.url)
     response.raise_for_status()                             
-
-    safe_file_name = sanitize_filename(file_name)
-    
-    file_path = os.path.join(dir, "books" , safe_file_name)
+           
+    file_path = os.path.join(dir, "books" , file_name)
 
     Path(os.path.join(dir, "books")).mkdir(parents = True, exist_ok = True)
 
     with open(file_path, 'wb') as file:
         file.write(response.text.encode())
+
      
 def download_img(url, file_name, dir):
 
@@ -93,10 +94,11 @@ def on_reload():
 
     template = env.get_template('template.html')
 
- 
+
+   
 
     rendered_page = template.render(
-    books_data = json_dicts
+    books_data = list(chunked(json_dicts, 2))
     )
 
     with open('index.html', 'w', encoding="utf8") as file:
@@ -143,11 +145,16 @@ def main():
             parameters =  {"id": book_id}
 
             if not args.skip_txt:
-                download_txt(parameters, f"Книга {book_id} {book_data['title']}.txt", args.dest_folder)
+                book_data['text_path'] =  os.path.join( "books", sanitize_filename(f"book_{book_id}_{book_data['title']}.txt").replace(" ", "_") )
+                print(book_data['text_path'])
+                download_txt(parameters,  sanitize_filename(f"book_{book_id}_{book_data['title']}.txt").replace(" ", "_"), args.dest_folder) 
+               # print(f"book_{book_id}.txt")
+
 
             if not args.skip_imgs:
-                book_data['cover_path'] =  os.path.join(args.dest_folder, "images", sanitize_filename(f"book_cover_{book_id}.png"))
-                download_img(book_data['cover'],  f"book_cover_{book_id}.png", args.dest_folder)    
+                book_data['cover_path'] =  os.path.join( "images", sanitize_filename(f"book_cover_{book_id}_{book_data['title']}.png").replace(" ", "_") )
+
+                download_img(book_data['cover'],  f"book_cover_{book_id}_{book_data['title']}.png", args.dest_folder) 
 
             json_dicts.append(book_data)
                        
