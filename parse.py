@@ -4,12 +4,13 @@ from urllib.parse import urljoin
 from pathlib import Path
 from livereload import Server
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from more_itertools import chunked
 
 import os
 import argparse
 import requests
 import json
-
+import pprint
 
 json_dicts = []
 
@@ -92,8 +93,12 @@ def on_reload():
 
     template = env.get_template('template.html')
 
+    for i in list(chunked(json_dicts, 2)):
+        for u in i:
+            print(u)
+
     rendered_page = template.render(
-    books_data = json_dicts 
+    books_data = json_dicts
     )
 
     with open('index.html', 'w', encoding="utf8") as file:
@@ -117,8 +122,6 @@ def main():
     args = parser.parse_args()
 
     json_path = os.path.join(args.json_path, "data.json" )
-        
-    
 
     for page_id in range(args.start_page, args.end_page):
 
@@ -137,10 +140,7 @@ def main():
             book_url = urljoin(url, book_card.select_one("a")["href"])
             book_id = book_url.split('/b')[-1]         
             
-            book_data = parse_book_page(book_url)
-            
-
-            
+            book_data = parse_book_page(book_url)       
 
             parameters =  {"id": book_id}
 
@@ -150,8 +150,6 @@ def main():
             if not args.skip_imgs:
                 book_data['cover_path'] =  os.path.join(args.dest_folder, "images", sanitize_filename(f"book_cover_{book_id}_{book_data['title']}.png").replace(" ", "_") )
                 download_img(book_data['cover'],  f"book_cover_{book_id}_{book_data['title']}.png", args.dest_folder)    
-
-           
 
             json_dicts.append(book_data)
                        
@@ -167,9 +165,6 @@ def main():
 
     server.serve(root='.')
 
-
-
-  
 
 if __name__ == '__main__':
     main()
