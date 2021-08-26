@@ -10,7 +10,7 @@ import os
 import argparse
 import requests
 import json
-import pprint
+
 
 json_dicts = []
 
@@ -148,8 +148,8 @@ def main():
                 download_txt(parameters, f"Книга {book_id} {book_data['title']}.txt", args.dest_folder)
 
             if not args.skip_imgs:
-                book_data['cover_path'] =  os.path.join(args.dest_folder, "images", sanitize_filename(f"book_cover_{book_id}_{book_data['title']}.png").replace(" ", "_") )
-                download_img(book_data['cover'],  f"book_cover_{book_id}_{book_data['title']}.png", args.dest_folder)    
+                book_data['cover_path'] =  os.path.join(args.dest_folder, "images", sanitize_filename(f"book_cover_{book_id}.png"))
+                download_img(book_data['cover'],  f"book_cover_{book_id}.png", args.dest_folder)    
 
             json_dicts.append(book_data)
                        
