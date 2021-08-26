@@ -93,9 +93,7 @@ def on_reload():
 
     template = env.get_template('template.html')
 
-    for i in list(chunked(json_dicts, 2)):
-        for u in i:
-            print(u)
+ 
 
     rendered_page = template.render(
     books_data = json_dicts
