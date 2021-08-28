@@ -143,8 +143,7 @@ def main():
         for book_card in book_cards:                  
             
             book_url = urljoin(url, book_card.select_one("a")["href"])
-            book_id = book_url.split('/b')[-1]         
-            
+            book_id = book_url.split('/b')[-1]                     
             book_data = parse_book_page(book_url)       
 
             parameters =  {"id": book_id}
