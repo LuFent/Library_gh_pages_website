@@ -4,8 +4,6 @@ from pathvalidate import sanitize_filename
 from urllib.parse import urljoin
 from tqdm import tqdm
 from pathlib import Path
-from urllib.parse import quote
-
 
 import os
 import argparse
