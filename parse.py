@@ -100,9 +100,6 @@ def download_img(url, file_name, directory):
 
 
 def main():
-
-    sep = os.sep
-
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--start_page', type=int, default=1, help='starting page')
@@ -144,13 +141,13 @@ def main():
 
                 if not args.skip_txt:
                     file_name = sanitize_filename(f"book_{book_id}_{book_data['title']}.txt").replace(" ", "_")
-                    book_data['text_path'] = quote(".." + sep + "books" + sep + file_name)
+                    book_data['text_path'] = ".." + "/" + "books" + "/" + file_name
                     download_txt(parameters,  sanitize_filename(f"book_{book_id}_{book_data['title']}.txt")
                                  .replace(" ", "_"), args.dest_folder)
 
                 if not args.skip_imgs:
                     file_name = sanitize_filename(f"book_cover_{book_id}_{book_data['title']}.png").replace(" ", "_")
-                    book_data['cover_path'] = quote(".." + sep + "images" + sep + file_name)
+                    book_data['cover_path'] = ".." + "/" + "images" + "/" + file_name
                     download_img(book_data['cover'], f"book_cover_{book_id}_{book_data['title']}.png", args.dest_folder)
 
                 json_dicts.append(book_data)

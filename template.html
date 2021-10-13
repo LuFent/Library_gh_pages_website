@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/Library/static/bootstrap.min.css">
-    <link rel="icon" href="/Library/static/lg.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/../static/bootstrap.min.css">
+    <link rel="icon" href="/../static/lg.ico" type="image/x-icon">
 
     <title>Библиотека научной фантастики</title>
 </head>
@@ -60,7 +60,7 @@
                 <div class="card mb-3" style="max-width: 540px;">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img src={{ book_data['cover_path'] }} class="card-img" alt="Cover of book {{ book_data['title'] }}">
+                            <img src={{ book_data['cover_path'] | urlencode}} class="card-img" alt="Cover of book {{ book_data['title'] }}">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -71,7 +71,7 @@
                                     {% endfor %}
                                 </h6>
                                 <p class="card-text">{{ book_data['author'] }}</p>
-                                <a href="{{ book_data['text_path']  }}" target="_blank" rel="noopener noreferrer">Читать</a>
+                                <a href="{{ book_data['text_path'] | urlencode}}" target="_blank" rel="noopener noreferrer">Читать</a>
                                 <p class="card-text"><small class="text-muted"></small></p>
                             </div>
                         </div>
