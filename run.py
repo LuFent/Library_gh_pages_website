@@ -13,21 +13,30 @@ with open('data.json', 'r', encoding='cp1251') as fh:
 def on_reload():
 
     env = Environment(loader=FileSystemLoader('.'), autoescape=select_autoescape(['html', 'xml']))
-
-    size_of_packages = 10
-
     template = env.get_template('template.html')
-
-    Path("pages").mkdir(parents=True, exist_ok=True)
     
-    pages_at_all = len(list(chunked(json_dicts, size_of_packages)))
+    Path("pages").mkdir(parents=True, exist_ok=True)
 
-    for index, books_packages in enumerate(list(chunked(json_dicts, size_of_packages))):
+    amount_of_books_per_page = 10    
+    pages_at_all = len(list(chunked(json_dicts, amount_of_books_per_page)))
 
-        rendered_page = template.render(books_data=list(chunked(list(books_packages), 2)), page_number=index + 1,
-                                        pages_at_all=pages_at_all)
+    for index, books_packages in enumerate(list(chunked(json_dicts, amount_of_books_per_page)), start=1):
 
-        with open(f"pages/index{index + 1}.html", 'w', encoding="utf8") as file:
+        if index <= 5:
+            paginator_left_index = 1
+            paginator_right_index = 11
+        elif index >= pages_at_all - 5:
+            paginator_right_index = pages_at_all
+            paginator_left_index = pages_at_all - 10
+        else:
+            paginator_left_index = index - 5
+            paginator_right_index = index + 5
+
+        books_by_cols = list(chunked(list(books_packages), 2))
+        rendered_page = template.render(books_data=books_by_cols, page_number=index,
+                                        pages_at_all=pages_at_all, r=paginator_right_index, l=paginator_left_index)
+
+        with open(f"pages/index{index}.html", 'w', encoding="utf8") as file:
             file.write(rendered_page)
 
     print("Site rebuilt")
