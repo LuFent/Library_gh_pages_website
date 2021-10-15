@@ -11,7 +11,6 @@ with open('data.json', 'r', encoding='cp1251') as fh:
 
 
 def on_reload():
-
     env = Environment(loader=FileSystemLoader('.'), autoescape=select_autoescape(['html', 'xml']))
     template = env.get_template('template.html')
     
@@ -45,11 +44,8 @@ def on_reload():
 def main():
 
     on_reload()
-
     server = Server()
-
     server.watch('template.html', on_reload)
-
     server.serve(root='.')
 
 

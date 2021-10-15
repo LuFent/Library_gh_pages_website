@@ -55,7 +55,7 @@ def parse_book_page(url):
     book_data["cover"] = urljoin(url, image_tag["src"])
     
     book_data["comments"] = [coment.select_one("span").text for coment in soup.select("div.texts")]
-            
+
     book_data["ganres"] = [ganre.text for ganre in soup.select("span.d_book a")]
 
     return book_data
@@ -105,7 +105,6 @@ def main():
                         help='ending page')
     parser.add_argument('--dest_folder', default=os.path.join(os.path.abspath(os.curdir)), help='books and imgs dir')
     parser.add_argument('--json_path', default=os.path.join(os.path.abspath(os.curdir)), help='json-file dir')
-
     parser.add_argument('--skip_imgs', action="store_true", help='skip img download')
     parser.add_argument('--skip_txt', action="store_true",  help='skip txt download')
 
@@ -116,14 +115,13 @@ def main():
 
     for page_id in range(args.start_page, args.end_page):
         pbar.update(1)
+
         url = f"https://tululu.org/l55/{page_id}"
         response = requests.get(url)
         response.raise_for_status() 
 
         soup = BeautifulSoup(response.text, 'lxml')
-        
         book_cards_selector = "div#content"
-
         book_cards = soup.select_one(book_cards_selector).select("table")
         
         for book_card in book_cards:                  
@@ -149,7 +147,9 @@ def main():
                     download_img(book_data['cover'], f"book_cover_{book_id}_{book_data['title']}.png", args.dest_folder)
 
                 json_dicts.append(book_data)
+
     pbar.close()
+
     with open(json_path, 'a+') as file:
         json.dump(json_dicts, file, ensure_ascii=False, sort_keys=True, indent=4)    
     
