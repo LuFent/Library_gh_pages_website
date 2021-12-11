@@ -1,3 +1,7 @@
+"""
+    Renders pages with books cards and creates local server on http://127.0.0.1:5500
+    (http://127.0.0.1:5500/pages/index1.html to see first page)
+"""
 # -*- coding: utf-8 -*-
 from pathlib import Path
 from livereload import Server
@@ -11,6 +15,9 @@ with open('data.json', 'r', encoding='cp1251') as fh:
 
 
 def on_reload():
+    """
+        Function that renders pages by template
+    """
     env = Environment(loader=FileSystemLoader('.'), autoescape=select_autoescape(['html', 'xml']))
     template = env.get_template('template.html')
     
@@ -42,6 +49,10 @@ def on_reload():
 
 
 def main():
+    """
+        Runs on_reload
+        Constantly checks for changes in template file , if there are some runs on_reload() again
+    """
     on_reload()
     server = Server()
     server.watch('template.html', on_reload)

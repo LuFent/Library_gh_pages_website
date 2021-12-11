@@ -1,3 +1,7 @@
+"""
+    parses Sci-Fi section of website https://tululu.org/ and creates json dict with books data
+    This dict will be used to render pages in run.py
+"""
 
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
@@ -11,15 +15,19 @@ import requests
 import json
 
 
-json_dicts = []
-
 
 def check_for_redirect(response):
+    """
+        Checks if response was redirected
+    """
     if response.history:
         raise requests.HTTPError
 
 
 def get_pages_amount(url):
+    """
+        Gets amount of pages with Sci-Fi on website
+    """
     response = requests.get(url)
     check_for_redirect(response)
     response.raise_for_status() 
@@ -33,6 +41,9 @@ def get_pages_amount(url):
 
 
 def parse_book_page(url):
+    """
+        returns dict with book data, such as title, author, cover_path and genres
+    """
     response = requests.get(url)
     check_for_redirect(response)
     response.raise_for_status() 
@@ -62,6 +73,9 @@ def parse_book_page(url):
 
 
 def if_text_exist(parameters):   
+    """
+        Some books on website are placed without text, function checks if text has text or not
+    """
     url = "https://tululu.org/txt.php"
 
     response = requests.get(url, params=parameters, allow_redirects=False)
@@ -72,6 +86,12 @@ def if_text_exist(parameters):
 
 
 def download_txt(parameters, file_name, directory):
+    """
+        downloads book
+        parameters - dict with book id
+        file_name - name of file
+        directory - where to save file
+    """
     url = "https://tululu.org/txt.php"
 
     response = requests.get(url, params=parameters, allow_redirects=False)
@@ -86,7 +106,12 @@ def download_txt(parameters, file_name, directory):
 
      
 def download_img(url, file_name, directory):
-
+    """
+        downloads cover image
+        url - url adres of image
+        file_name - name of file
+        directory - where to save file
+    """
     image_response = requests.get(url)
 
     safe_file_name = sanitize_filename(file_name).replace(" ", "_")
@@ -98,6 +123,11 @@ def download_img(url, file_name, directory):
 
 
 def main():
+    """
+        Runs all other funcs, and creates json dict, that contains books data and paths to its text and cover
+    """
+    json_dicts = []
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--start_page', type=int, default=1, help='starting page')
