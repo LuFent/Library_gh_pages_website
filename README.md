@@ -24,7 +24,7 @@
  ```
   pip install -r requirements.txt
 
-  python parse.py --start_page <...> --end_page <...> --dest_folder <...> --json_path <...> --skip_imgs --skip_txt
+  python parse.py --start_page <...> --end_page <...>
 
 ```
  * --start_page - Номер страницы с книгами с которой начнется парсинг

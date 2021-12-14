@@ -65,7 +65,7 @@ def parse_book_page(url):
 
     book_data["cover"] = urljoin(url, image_tag["src"])
     
-    book_data["comments"] = [coment.select_one("span").text for coment in soup.select("div.texts")]
+    #book_data["comments"] = [coment.select_one("span").text for coment in soup.select("div.texts")]
 
     book_data["ganres"] = [ganre.text for ganre in soup.select("span.d_book a")]
 
@@ -133,10 +133,13 @@ def main():
     parser.add_argument('--start_page', type=int, default=1, help='starting page')
     parser.add_argument('--end_page', type=int, default=get_pages_amount("https://tululu.org/l55/1/"),
                         help='ending page')
+
+    # Args for development
     parser.add_argument('--dest_folder', default=os.path.join(os.path.abspath(os.curdir)), help='books and imgs dir')
     parser.add_argument('--json_path', default=os.path.join(os.path.abspath(os.curdir)), help='json-file dir')
     parser.add_argument('--skip_imgs', action="store_true", help='skip img download')
     parser.add_argument('--skip_txt', action="store_true",  help='skip txt download')
+
 
     args = parser.parse_args()
 
