@@ -2,4 +2,4 @@
 
 
 Готовый сайт находится по ссылке
- https://lufent.github.io/Library/pages/index1.html
+https://lufent.github.io/Library_gh_pages_website/pages/index1.html
