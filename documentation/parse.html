@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module parse</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>parse</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:d%3A%5Cgithub%5Clibrary%5Cparse.py">d:\github\library\parse.py</a></font></td></tr></table>
+    <p><tt>parses&nbsp;Sci-Fi&nbsp;section&nbsp;of&nbsp;website&nbsp;https://tululu.org/&nbsp;and&nbsp;creates&nbsp;json&nbsp;dict&nbsp;with&nbsp;books&nbsp;data<br>
+This&nbsp;dict&nbsp;will&nbsp;be&nbsp;used&nbsp;to&nbsp;render&nbsp;pages&nbsp;in&nbsp;run.py</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="argparse.html">argparse</a><br>
+</td><td width="25%" valign=top><a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="requests.html">requests</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-check_for_redirect"><strong>check_for_redirect</strong></a>(response)</dt><dd><tt>Checks&nbsp;if&nbsp;response&nbsp;was&nbsp;redirected</tt></dd></dl>
+ <dl><dt><a name="-download_img"><strong>download_img</strong></a>(url, file_name, directory)</dt><dd><tt>downloads&nbsp;cover&nbsp;image<br>
+url&nbsp;-&nbsp;url&nbsp;adres&nbsp;of&nbsp;image<br>
+file_name&nbsp;-&nbsp;name&nbsp;of&nbsp;file<br>
+directory&nbsp;-&nbsp;where&nbsp;to&nbsp;save&nbsp;file</tt></dd></dl>
+ <dl><dt><a name="-download_txt"><strong>download_txt</strong></a>(parameters, file_name, directory)</dt><dd><tt>downloads&nbsp;book<br>
+parameters&nbsp;-&nbsp;dict&nbsp;with&nbsp;book&nbsp;id<br>
+file_name&nbsp;-&nbsp;name&nbsp;of&nbsp;file<br>
+directory&nbsp;-&nbsp;where&nbsp;to&nbsp;save&nbsp;file</tt></dd></dl>
+ <dl><dt><a name="-get_pages_amount"><strong>get_pages_amount</strong></a>(url)</dt><dd><tt>Gets&nbsp;amount&nbsp;of&nbsp;pages&nbsp;with&nbsp;Sci-Fi&nbsp;on&nbsp;website</tt></dd></dl>
+ <dl><dt><a name="-if_text_exist"><strong>if_text_exist</strong></a>(parameters)</dt><dd><tt>Some&nbsp;books&nbsp;on&nbsp;website&nbsp;are&nbsp;placed&nbsp;without&nbsp;text,&nbsp;function&nbsp;checks&nbsp;if&nbsp;text&nbsp;has&nbsp;text&nbsp;or&nbsp;not</tt></dd></dl>
+ <dl><dt><a name="-main"><strong>main</strong></a>()</dt><dd><tt>Runs&nbsp;all&nbsp;other&nbsp;funcs,&nbsp;and&nbsp;creates&nbsp;json&nbsp;dict,&nbsp;that&nbsp;contains&nbsp;books&nbsp;data&nbsp;and&nbsp;paths&nbsp;to&nbsp;its&nbsp;text&nbsp;and&nbsp;cover</tt></dd></dl>
+ <dl><dt><a name="-parse_book_page"><strong>parse_book_page</strong></a>(url)</dt><dd><tt>returns&nbsp;dict&nbsp;with&nbsp;book&nbsp;data,&nbsp;such&nbsp;as&nbsp;title,&nbsp;author,&nbsp;cover_path&nbsp;and&nbsp;genres</tt></dd></dl>
+</td></tr></table>
+</body></html>
