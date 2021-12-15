@@ -1,2 +1,6 @@
-.env
 __pycache__
+run.py
+parse.py
+data.json
+template.html
+requirements.txt

@@ -8,9 +8,9 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>parse</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:d%3A%5Cgithub%5Clibrary%5Cparse.py">d:\github\library\parse.py</a></font></td></tr></table>
-    <p><tt>parses&nbsp;Sci-Fi&nbsp;section&nbsp;of&nbsp;website&nbsp;https://tululu.org/&nbsp;and&nbsp;creates&nbsp;json&nbsp;dict&nbsp;with&nbsp;books&nbsp;data<br>
-This&nbsp;dict&nbsp;will&nbsp;be&nbsp;used&nbsp;to&nbsp;render&nbsp;pages&nbsp;in&nbsp;run.py</tt></p>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:d%3A%5Cgithub%5Clibrary_k%5Cparse.py">d:\github\library_k\parse.py</a></font></td></tr></table>
+    <p><tt>parses&nbsp;Sci-Fi&nbsp;section&nbsp;of&nbsp;website&nbsp;https://tululu.org/&nbsp;and&nbsp;creates&nbsp;json&nbsp;dicts&nbsp;with&nbsp;books&nbsp;data<br>
+This&nbsp;dicts&nbsp;will&nbsp;be&nbsp;used&nbsp;to&nbsp;render&nbsp;pages&nbsp;in&nbsp;run.py</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -38,9 +38,10 @@ directory&nbsp;-&nbsp;where&nbsp;to&nbsp;save&nbsp;file</tt></dd></dl>
 parameters&nbsp;-&nbsp;dict&nbsp;with&nbsp;book&nbsp;id<br>
 file_name&nbsp;-&nbsp;name&nbsp;of&nbsp;file<br>
 directory&nbsp;-&nbsp;where&nbsp;to&nbsp;save&nbsp;file</tt></dd></dl>
- <dl><dt><a name="-get_pages_amount"><strong>get_pages_amount</strong></a>(url)</dt><dd><tt>Gets&nbsp;amount&nbsp;of&nbsp;pages&nbsp;with&nbsp;Sci-Fi&nbsp;on&nbsp;website</tt></dd></dl>
- <dl><dt><a name="-if_text_exist"><strong>if_text_exist</strong></a>(parameters)</dt><dd><tt>Some&nbsp;books&nbsp;on&nbsp;website&nbsp;are&nbsp;placed&nbsp;without&nbsp;text,&nbsp;function&nbsp;checks&nbsp;if&nbsp;text&nbsp;has&nbsp;text&nbsp;or&nbsp;not</tt></dd></dl>
- <dl><dt><a name="-main"><strong>main</strong></a>()</dt><dd><tt>Runs&nbsp;all&nbsp;other&nbsp;funcs,&nbsp;and&nbsp;creates&nbsp;json&nbsp;dict,&nbsp;that&nbsp;contains&nbsp;books&nbsp;data&nbsp;and&nbsp;paths&nbsp;to&nbsp;its&nbsp;text&nbsp;and&nbsp;cover</tt></dd></dl>
+ <dl><dt><a name="-get_pages_amount"><strong>get_pages_amount</strong></a>(url)</dt><dd><tt>Gets&nbsp;amount&nbsp;of&nbsp;pages&nbsp;with&nbsp;Sci-Fi&nbsp;on&nbsp;website<br>
+It&nbsp;is&nbsp;needed&nbsp;to&nbsp;parse&nbsp;all&nbsp;available&nbsp;books</tt></dd></dl>
+ <dl><dt><a name="-if_text_exist"><strong>if_text_exist</strong></a>(parameters)</dt><dd><tt>Some&nbsp;books&nbsp;on&nbsp;website&nbsp;are&nbsp;placed&nbsp;without&nbsp;text,&nbsp;function&nbsp;checks&nbsp;if&nbsp;book&nbsp;has&nbsp;text&nbsp;or&nbsp;not</tt></dd></dl>
+ <dl><dt><a name="-main"><strong>main</strong></a>()</dt><dd><tt>Runs&nbsp;all&nbsp;other&nbsp;funcs,&nbsp;and&nbsp;creates&nbsp;json&nbsp;dicts,&nbsp;that&nbsp;contains&nbsp;books&nbsp;data&nbsp;and&nbsp;paths&nbsp;to&nbsp;its&nbsp;text&nbsp;and&nbsp;cover</tt></dd></dl>
  <dl><dt><a name="-parse_book_page"><strong>parse_book_page</strong></a>(url)</dt><dd><tt>returns&nbsp;dict&nbsp;with&nbsp;book&nbsp;data,&nbsp;such&nbsp;as&nbsp;title,&nbsp;author,&nbsp;cover_path&nbsp;and&nbsp;genres</tt></dd></dl>
 </td></tr></table>
 </body></html>
